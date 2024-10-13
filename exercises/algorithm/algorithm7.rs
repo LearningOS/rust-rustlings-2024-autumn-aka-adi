@@ -3,13 +3,14 @@
 	This question requires you to use a stack to achieve a bracket match
 */
 
-// I AM NOT DONE
 #[derive(Debug)]
 struct Stack<T> {
 	size: usize,
 	data: Vec<T>,
 }
-impl<T> Stack<T> {
+impl<T> Stack<T> 
+where T: std::clone::Clone
+{
 	fn new() -> Self {
 		Self {
 			size: 0,
@@ -31,8 +32,11 @@ impl<T> Stack<T> {
 		self.size += 1;
 	}
 	fn pop(&mut self) -> Option<T> {
-		// TODO
-		None
+		if 0 == self.size {
+			return None;
+		}
+		self.size -= 1;
+		self.data.pop()
 	}
 	fn peek(&self) -> Option<&T> {
 		if 0 == self.size {
@@ -102,7 +106,29 @@ impl<'a, T> Iterator for IterMut<'a, T> {
 fn bracket_match(bracket: &str) -> bool
 {
 	//TODO
-	true
+	let mut st = Stack::<char>::new();
+	let cs = bracket.chars();
+	for c in cs {
+		if c == ')' || c == '}' || c == ']' {
+			match st.peek() {
+				None => return false,
+				Some(&cc) => {
+					if (cc == '(' && c == ')')
+						 || (cc == '{' && c == '}')
+						 || (cc == '[' && c == ']') {
+							st.pop();
+						 }
+					else {
+						return false;
+					}
+				}
+			}
+		}
+		else if c == '(' || c == '{' || c == '[' {
+			st.push(c);
+		};
+	}
+	st.is_empty()
 }
 
 #[cfg(test)]

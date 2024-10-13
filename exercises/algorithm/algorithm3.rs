@@ -3,10 +3,20 @@
 	This problem requires you to implement a sorting algorithm
 	you can use bubble sorting, insertion sorting, heap sorting, etc.
 */
-// I AM NOT DONE
 
-fn sort<T>(array: &mut [T]){
+fn sort<T>(array: &mut [T])
+where T: std::clone::Clone + std::cmp::PartialOrd
+{
 	//TODO
+    for _ in 1..array.len() {
+        for i in 1..array.len() {
+            if array[i] < array[i - 1] {
+                let mut e = array[i].clone();
+                array[i] = array[i - 1].clone();
+                array[i - 1] = e;
+            }
+        }
+    }
 }
 #[cfg(test)]
 mod tests {
